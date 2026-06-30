@@ -42,6 +42,20 @@ $resultado = $conn->query($sql);
         text-decoration: none; border-radius: 4px; font-size: 13px; font-weight: bold;
         }
         .btn-eliminar:hover { background-color: #b91c1c; }
+        .btn-editar {
+    background-color: #f59e0b;
+    color: white;
+    padding: 6px 12px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.btn-editar:hover {
+    background-color: #d97706;
+}
     </style>
 </head>
 <body>
@@ -80,17 +94,20 @@ text-decoration: none; border-radius: 5px;">+ Nuevo Producto</a>
             <tr>
                 <td> <?php echo $fila['id']; ?> </td>
                 <td> <?php echo $fila['nombre_producto']; ?> </td>
-                <td> <?php echo $fila['nombre_categoria']; ?> </td>
-                <td class="<?php echo $claseStock; ?>"> <?php echo $fila['stock']; ?> unds. </td>
-                <td> $<?php echo number_format($fila['precio'], 2); ?> </td>
-                <td>
-                    <a href="eliminar_producto.php?id=<?php echo $fila['id']; ?>"
-                        class="btn-eliminar"
-                        onclick="return confirm('¿Estás absolutamente seguro de eliminar el producto: <?php
-                        echo $fila['nombre_producto']; ?>?');">
-                    🗑️ Eliminar
-                    </a>
-                </td>
+               <td>
+    <!-- Botón Editar -->
+    <a href="editar_producto.php?id=<?php echo $fila['id']; ?>"
+       class="btn-editar">
+       ✏️ Editar
+    </a>
+
+    <!-- Botón Eliminar -->
+    <a href="eliminar_producto.php?id=<?php echo $fila['id']; ?>"
+       class="btn-eliminar"
+       onclick="return confirm('¿Estás absolutamente seguro de eliminar el producto: <?php echo $fila['nombre_producto']; ?>?');">
+       🗑️ Eliminar
+    </a>
+</td>
             </tr>
         <?php
             } // Fin del bucle while
