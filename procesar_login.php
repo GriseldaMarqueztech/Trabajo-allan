@@ -37,13 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // 9. Validar si la contraseña coincide en texto plano
             if ($password === $row['password']) {
 
-                // Credenciales correctas: Almacenamos datos del usuario en la Sesión
+                // Credenciales correctas: Almacenamos datos del usuario en la sesión
                 $_SESSION['user_id'] = $row['id'];
                 $_SESSION['nombre'] = $row['nombre_completo'];
                 $_SESSION['rol'] = $row['rol'];
 
-                // Redirigir al usuario al Dashboard del sistema de inventario
-                header("Location: test_dashboard.php");
+                // Redirigir al Dashboard
+                header("Location: dashboard.php");
                 exit();
 
             } else {
@@ -58,15 +58,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
-        // Cerrar la sentencia de forma ordenada
+        // Cerrar la sentencia
         $stmt->close();
 
     } catch (mysqli_sql_exception $e) {
-        // Detener el script si hay un fallo crítico de SQL
         die("Error de autenticación en el servidor: " . $e->getMessage());
     }
+
 } else {
-    // Si intentan entrar directo a la URL, los devolvemos al Login
+    // Si intentan entrar directamente a la URL
     header("Location: index.php");
     exit();
 }
