@@ -114,14 +114,14 @@ $resultado = $conn->query("SELECT * FROM proveedores");
                 Volver
             </a>
 
-            <a href="#" class="btn-nuevo">
+            <!-- Botón conectado al formulario de nuevo proveedor -->
+            <a href="nuevo_proveedor.php" class="btn-nuevo">
                 + Nuevo Proveedor
             </a>
 
         </div>
 
     </div>
-
 
     <table>
 
