@@ -18,14 +18,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cantidad = $_POST['cantidad'];
     $precio_compra = $_POST['precio_compra'];
 
-    // Calcular el total general de la compra
+    // Calcular el total de la compra
     $total_compra = $cantidad * $precio_compra;
 
     try {
 
-        // --- FASE 1: INSERTAR MAESTRO (Cabecera) ---
+        // --- FASE 1: INSERTAR MAESTRO (CABECERA) ---
 
-        $sql_compras = "INSERT INTO compras (proveedor_id, usuario_id, total) VALUES (?, ?, ?)";
+        $sql_compras = "INSERT INTO compras 
+                        (proveedor_id, usuario_id, total) 
+                        VALUES (?, ?, ?)";
 
         $stmt1 = $conn->prepare($sql_compras);
 
@@ -46,9 +48,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // --- FASE 2: INSERTAR DETALLE ---
 
-        $sql_detalle = "INSERT INTO detalle_compras 
-        (compra_id, producto_id, cantidad, precio_compra) 
-        VALUES (?, ?, ?, ?)";
+        $sql_detalle = "INSERT INTO detalle_compras
+                        (compra_id, producto_id, cantidad, precio_compra)
+                        VALUES (?, ?, ?, ?)";
 
         $stmt2 = $conn->prepare($sql_detalle);
 
@@ -66,9 +68,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt2->close();
 
 
-        // Redirigir al dashboard después de guardar
+        // --- FASE 3: ACTUALIZAR EL INVENTARIO FÍSICO ---
+
+        // Sumar la cantidad comprada al stock actual
+        $sql_stock = "UPDATE productos 
+                      SET stock = stock + ? 
+                      WHERE id = ?";
+
+        $stmt3 = $conn->prepare($sql_stock);
+
+        // Vincular cantidad e ID del producto
+        $stmt3->bind_param(
+            "ii",
+            $cantidad,
+            $producto_id
+        );
+
+        $stmt3->execute();
+
+        $stmt3->close();
+
+
+        // --- REDIRIGIR AL DASHBOARD ---
+
         header("Location: dashboard.php");
         exit();
+
 
     } catch (mysqli_sql_exception $e) {
 
